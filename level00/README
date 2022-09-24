@@ -1,0 +1,26 @@
+Подключаемся по ssh к snowcrash
+```
+>ssh level00@[ip] -p 4242
+```
+Ищем файлы у которых владелиц flag00
+```
+>find / -user flag00 2> /dev/null
+```
+Находим два файлы
+```
+/usr/sbin/john
+/rofs/usr/sbin/john
+```
+В них хранится пароль зашифровный кодом цезаря
+```
+cdiiddwpgswtgt
+```
+Делаем смещение на 1 символов получаем пароль от учетки flag00
+```
+nottoohardhere
+``` 
+Заходим по flag00 и получаем flag
+```
+>su flag00
+>getflag
+```

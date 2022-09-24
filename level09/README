@@ -1,0 +1,34 @@
+У нас есть бинарник level08 и token
+Если подать ./leve08 00000 увидим что у нас происходит сдвиг char + index
+```
+level09@SnowCrash:~$ ./level09 0000000
+0123456
+```
+Скопируем token на локальную машины
+```
+scp -P 4242 scp://level09@192.168.2.131/token ./token
+```
+
+и напишим дескриптор на с
+```
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+int main(int argc, char **argv) {
+    FILE *fptr = fopen( argv[1], "r" );
+    char str[100];
+    fscanf(fptr,"%s",str);
+    printf("%s\n",str);
+    for (int i = 0; i < strlen(str); i++)
+        str[i] = str[i] - i;
+    printf("%s\n",str);
+    fclose(fptr);
+}
+```
+Подадим в написанаю программу token
+```
+infetm@AsusInfe:~$ gcc decript.c && ./a.out token
+f4kmm6p|=�p�n��DB�Du{��
+f3iji1ju5yuevaus41q1afiuq
+```
+получем пароль от flag09 

